@@ -49,7 +49,7 @@ export default {
     info: [
       {
         label: "Name",
-        value: "Kirill",
+        value: "",
         pattern: /^[a-zA-Z ]{2,30}$/,
       },
       {
@@ -69,7 +69,7 @@ export default {
       },
       {
         label: "Some Field 2",
-        value: "sdf",
+        value: "",
         pattern: /.+/,
       },
     ],

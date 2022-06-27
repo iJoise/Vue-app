@@ -12,7 +12,7 @@
       <slot :params="params"></slot>
     </div>
     <div class="modal__action">
-      <button class="btn btn-primary me-5" @click="$emit('confirm', close)">
+      <button class="btn btn-success me-5" @click="$emit('confirm', close)">
         confirm
       </button>
       <button class="btn btn-danger" @click="$emit('cancel', close)">

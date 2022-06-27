@@ -2,9 +2,15 @@
   <div class="mb-3">
     <label class="mb-1">
       {{ label }}
-      <transition name="fade" appear>
+      <transition
+        v-if="activated"
+        name="icon"
+        mode="out-in"
+        appear
+        appear-active-class="icon-appear"
+      >
         <fa-icon
-          v-if="activated"
+          :key="valid"
           :icon="validIcon"
           :class="validClass"
           class="pl-3"
@@ -41,8 +47,34 @@ export default {
 </script>
 
 <style scoped>
-.fade-enter-active {
-  animation: fadeIn 0.4s;
+.icon-enter-active {
+  animation: iconIn 0.2s;
+}
+
+.icon-leave-active {
+  animation: iconOut 0.2s;
+}
+
+.icon-appear {
+  animation: fadeIn 0.3s;
+}
+
+@keyframes iconIn {
+  from {
+    transform: rotateY(-90deg);
+  }
+  to {
+    transform: rotateY(0deg);
+  }
+}
+
+@keyframes iconOut {
+  from {
+    transform: rotateY(0deg);
+  }
+  to {
+    transform: rotateY(90deg);
+  }
 }
 
 @keyframes fadeIn {
