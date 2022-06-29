@@ -1,14 +1,19 @@
 <template>
-  <app-form />
+  <div>
+    <app-header />
+    <app-content />
+  </div>
 </template>
 
 <script>
-import AppForm from "./pages/Form/Form.vue";
+import AppHeader from "./components/Header";
+import AppContent from "./components/Content";
+
 export default {
+  name: "App",
   components: {
-    AppForm,
+    AppHeader,
+    AppContent,
   },
 };
 </script>
-
-<style></style>
