@@ -1,5 +1,5 @@
 import { createStore } from "vuex";
-import { ORDER_STATUSES } from "./constants/index";
+import { ORDER_STATUSES } from "@/constants";
 
 export default createStore({
   state: {
