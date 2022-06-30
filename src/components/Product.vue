@@ -1,31 +1,28 @@
 <template>
-  <div>
-    <h2>Product title</h2>
-    <div class="price">{{ price }}</div>
+  <div v-if="productItem">
+    <h1>{{ productItem.title }}</h1>
     <hr />
-    <button class="btn btn-warning" @click="decrease">-1</button>
-    <input type="text" :value="cnt" @change="setCnt" />
-    <button class="btn btn-success" @click="increase">+1</button>
-    <hr />
-    <button class="btn btn-primary mb-3" @click="sendOrder">Send</button>
-    <div class="alert alert-warning" v-if="orderIsPending">Pending...</div>
-    <div class="alert alert-success" v-else-if="orderIsDone">Done!</div>
+    <div class="alert alert-success">price {{ productItem.price }}</div>
+    <button class="btn btn-outline-success" @click="$router.back()">
+      Back to products
+    </button>
   </div>
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
-
+import { mapGetters } from "vuex";
 export default {
-  name: "AppProduct",
-  computed: mapGetters(["price", "cnt", "orderIsPending", "orderIsDone"]),
-  methods: {
-    ...mapActions(["increase", "decrease", "sendOrder"]),
-    async setCnt(e) {
-      const lastCnt = this.cnt;
-      this.$store.dispatch("setCnt", e.target.value);
-      if (lastCnt === this.cnt) this.$forceUpdate();
+  name: "StoreProduct",
+  computed: {
+    ...mapGetters("products", ["product"]),
+    productItem() {
+      return this.product(this.$route.params.id);
     },
+  },
+  created() {
+    if (!this.product(this.$route.params.id)) {
+      this.$router.push({ name: "catalog" });
+    }
   },
 };
 </script>
