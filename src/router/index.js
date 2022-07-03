@@ -28,7 +28,6 @@ const routes = [
     component: AppProduct,
   },
   {
-    name: "404",
     path: "/:any(.*)", // .*
     component: AppE404,
   },

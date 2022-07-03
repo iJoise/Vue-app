@@ -1,28 +1,37 @@
 <template>
-  <div v-if="productItem">
-    <h1>{{ productItem.title }}</h1>
+  <div v-if="hasProduct">
+    <h1>{{ product.title }}</h1>
     <hr />
-    <div class="alert alert-success">price {{ productItem.price }}</div>
-    <button class="btn btn-outline-success" @click="$router.back()">
-      Back to products
-    </button>
+    <div class="alert alert-success">price {{ product.price }}</div>
   </div>
+  <not-found v-else />
+  <button class="btn btn-outline-success" @click="$router.back()">
+    Back to products
+  </button>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
+import NotFound from "./E404";
 export default {
   name: "StoreProduct",
-  computed: {
-    ...mapGetters("products", ["product"]),
-    productItem() {
-      return this.product(this.$route.params.id);
-    },
+  components: {
+    NotFound,
   },
-  created() {
-    if (!this.product(this.$route.params.id)) {
-      this.$router.push({ name: "catalog" });
-    }
+  computed: {
+    ...mapGetters("products", ["productById"]),
+    id() {
+      return parseInt(this.$route.params.id);
+    },
+    validId() {
+      return /^[1-9]+\d*$/.test(this.id);
+    },
+    product() {
+      return this.productById(this.id);
+    },
+    hasProduct() {
+      return this.validId && this.product !== undefined;
+    },
   },
 };
 </script>

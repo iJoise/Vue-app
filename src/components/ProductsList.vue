@@ -45,7 +45,7 @@ export default {
   name: "AllProducts",
   computed: {
     ...mapGetters("products", { productList: "all" }),
-    ...mapGetters("cart", ["inCart", "allProductInCart"]),
+    ...mapGetters("cart", ["inCart", "itemsDetailed"]),
   },
   methods: {
     ...mapActions("cart", ["add", "remove"]),

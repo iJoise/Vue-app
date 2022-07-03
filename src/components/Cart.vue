@@ -3,40 +3,22 @@
     <h1>Cart</h1>
     <hr />
     <div>
-      <table class="table table-bordered">
-        <tbody>
+      <table class="table table-bordered table-hover">
+        <thead>
           <tr>
-            <td>Title</td>
-            <td>Price</td>
-            <td>Count</td>
+            <th>Title</th>
+            <th>Price</th>
+            <th>Count</th>
+            <th>Total</th>
+            <th>Actions</th>
           </tr>
-          <tr v-for="product in allProductInCart" :key="product.id">
-            <td>{{ product.title }}</td>
-            <td>{{ product.price }}</td>
-            <td>
-              <div class="input-group">
-                <button
-                  class="btn btn-warning"
-                  @click="decrease({ id: product.id, cnt: product.cnt - 1 })"
-                >
-                  -1
-                </button>
-                <input
-                  :style="{ maxWidth: '50px' }"
-                  class="form-control text-center"
-                  type="text"
-                  :value="product.cnt"
-                  @change="setCnt($event, { id: product.id, cnt: product.cnt })"
-                />
-                <button
-                  class="btn btn-success"
-                  @click="increase({ id: product.id, cnt: product.cnt + 1 })"
-                >
-                  +1
-                </button>
-              </div>
-            </td>
-          </tr>
+        </thead>
+        <tbody v-if="!loading">
+          <CartTable
+            v-for="product in itemsDetailed"
+            :key="product.id"
+            :product="product"
+          />
         </tbody>
       </table>
     </div>
@@ -47,19 +29,28 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
+import { mapGetters } from "vuex";
+import CartTable from "./CartTable";
+
 export default {
   name: "StoreCart",
-  computed: {
-    ...mapGetters("cart", ["allProductInCart"]),
+  data() {
+    return {
+      loading: false,
+    };
   },
-  methods: {
-    ...mapActions("cart", ["increase", "decrease"]),
-    async setCnt(e, payload) {
-      const lastCnt = payload.cnt;
-      this.$store.dispatch("cart/setCnt", { ...payload, cnt: e.target.value });
-      if (lastCnt === payload.cnt) this.$forceUpdate();
-    },
+  components: {
+    CartTable,
+  },
+  computed: {
+    ...mapGetters("cart", ["itemsDetailed"]),
+  },
+  created() {
+    this.loading = true;
+
+    this.$store.dispatch("cart/load");
+
+    this.loading = false;
   },
 };
 </script>
