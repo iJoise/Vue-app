@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="ru">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>1</title>
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<link href="css/styles.css" rel="stylesheet">
+	<script src="js/vue.js"></script>
+</head>
+<body>
+<div class="wrapper">
+	<div class="sample">
+		<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aut incidunt aspernatur voluptatem! Facilis qui, consequuntur vel ipsa hic necessitatibus repellat facere delectus nostrum, veniam reiciendis nobis, ratione accusamus vitae fugit.</p>
+		<p>Total: {{ total }}, items: {{ items }}</p>
+		<hr>
+		<app-alert title="Hello, user">
+			<p>Total: {{ total }}</p>
+			<p>Items: {{ items }}</p>
+			<template v-slot:footer>
+				<button type="button" class="btn btn-danger mr-1" @click="reset">Reset</button>
+				<button type="button" class="btn btn-primary">Send</button>
+			</template>
+		</app-alert>
+		<hr>
+		<app-alert title="Hello, user" color="danger"></app-alert>
+	</div>
+</div>
+<script>
+
+let app = Vue.createApp({
+	data: () => ({
+		total: 5000,
+		items: 3
+	}),
+	methods: {
+		reset(){
+			this.total = 0;
+			this.items = 0;
+		}
+	}
+});
+
+app.component('app-alert', {
+	props: {
+		title: String,
+		color: { type: String, default: 'success' }
+	},
+	template: `
+		<div class="alert" :class="classes">
+			<h4>{{ title }}</h4>
+			<hr>
+			<div>
+				<slot></slot>
+			</div>
+			<hr>
+			<slot name="footer">
+				<button type="button" class="btn btn-primary" @click="$emit('ok')">Ok</button>
+			</slot>	
+		</div>
+	`,
+	computed: {
+		classes(){
+			return 'alert-' + this.color;
+		}
+	}
+});
+
+app.mount('.sample');
+
+</script>
+</body>
+</html>

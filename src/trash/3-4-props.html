@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="ru">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>1</title>
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<link href="css/styles.css" rel="stylesheet">
+	<script src="js/vue.js"></script>
+</head>
+<body>
+<div class="wrapper">
+<div class="sample">
+	<app-some :a="10" :b="'5'" :c="100" f="6432478"></app-some>
+</div>
+</div>
+<script>
+
+let app = Vue.createApp({});
+
+app.component('app-some', {
+	template: `
+		<div>
+			<div>{{ a }}</div>
+			<div>{{ b }}</div>
+			<div>{{ c }}</div>
+			<div>{{ d }}</div>
+			<div>{{ e }}</div>
+		</div>
+	`,
+	props: {
+		a: Number,
+		b: String,
+		c: {
+			type: Number,
+			required: true
+		},
+		d: {
+			type: String,
+			default: "hello!"
+		},
+		e: {
+			type: Object,
+			default(){
+				return {
+					some: 'other'
+				}
+			}
+		},
+		f: {
+			type: String,
+			validator(val){
+				return /^[1-9][1-9]+$/.test(val);
+			}
+		}
+	}
+});
+
+app.mount('.sample');
+
+</script>
+</body>
+</html>

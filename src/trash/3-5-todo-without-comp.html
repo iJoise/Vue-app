@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link href="css/styles.css" rel="stylesheet">
+    <script src="js/vue.js"></script>
+</head>
+<body>
+<div class="wrapper">
+	<div class="sample">
+		<div class="Todo">
+			<h1>Your actions</h1>
+			<div class="action" v-for="(action, i) in todoList">
+				<div class="alert" :class="getActionClass(action)">
+					<h2>{{ action.title }}</h2>
+					<div class="progress">
+						<div :style="{width: (action.current / action.max * 100) + '%'}"
+								class="progress-bar"
+						>
+						</div>
+					</div>
+					<hr>
+					<h3 v-if="action.current === action.max">All done!</h3>
+					<button v-else type="button" class="btn btn-primary" @click="makeStep(i)">
+						I make step!
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+	Vue.createApp({
+		data: () => ({
+			todoList: [
+				{ title: 'First action', current: 0, max: 5 },
+				{ title: 'Other work', current: 0, max: 10 },
+				{ title: 'Some fun', current: 0, max: 7 }
+			]
+		}),
+		methods: {
+			makeStep(i){
+				let step = this.todoList[i];
+
+				if(step.current < step.max){
+					step.current++;
+				}
+			},
+			getActionClass(action){
+				let rel = action.current / action.max;
+
+				return {
+					'alert-danger': rel < 0.25,
+					'alert-warning': rel >= 0.25 && rel < 0.75,
+					'alert-success': rel >= 0.75
+				}
+			}
+		}
+	}).mount('.sample');
+
+</script>
+</body>
+</html>

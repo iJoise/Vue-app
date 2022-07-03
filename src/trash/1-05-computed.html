@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ru">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Урок 1</title>
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<link href="css/styles.css" rel="stylesheet">
+	<script src="js/vue.js"></script>
+</head>
+<body>
+	<div class="wrapper">
+		<div class="sample">
+			FN: <input type="text" v-model.trim="firstName"><br>
+			LN: <input type="text" v-model.trim="lastName"><br>
+			<hr>
+			<h2>Hello, {{ fullName }}</h2>
+			<hr>
+			<button @click="showAlert = !showAlert" class="btn btn-success" type="button">Toggle alert</button>
+			<div class="alert alert-danger mt-3" v-show="showAlert">
+				Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt porro iste incidunt optio maxime eos vero cupiditate delectus in velit quae neque aliquid facilis nobis repellendus, quidem eveniet! Nihil, cum.
+			</div>
+			<hr>
+			{{ toUpper(firstName) }}
+			{{ toUpper(lastName) }}
+		</di> 
+	</div>
+	<script>
+		
+		let app = Vue.createApp({
+			data(){
+				return {
+					showAlert: false,
+					firstName: '',
+					lastName: ''
+				}
+			},
+			computed: {
+				fullName(){
+					console.log('here');
+					return (this.firstName + ' ' + this.lastName).trim();
+				}
+			},
+			methods: {
+				// some bad, на грани или за гранью философии vue...
+				toUpper(str){
+					return str.toUpperCase().split('').reverse().join('');
+				}
+			}
+		});
+		
+		let root = app.mount('.sample');
+		console.log(root)
+
+	</script>
+</body>
+</html>

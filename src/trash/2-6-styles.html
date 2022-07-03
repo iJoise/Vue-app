@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="ru">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>1</title>
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<link href="css/styles.css" rel="stylesheet">
+	<script src="js/vue.js"></script>
+	<style>
+		.transition-mh{
+			transition: min-height 0.5s;
+		}
+	</style>
+</head>
+<body>
+	<div class="wrapper">
+		<div class="sample">
+			{{ alertHeight }}
+			<button class="btn btn-danger" @click="alertHeight += 50">++</button>
+			<hr>
+			<div class="alert alert-success transition-mh" :style="alertStyles">
+				Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatum architecto voluptatibus delectus odit eveniet magni, laboriosam, eos excepturi adipisci nemo at sint ea quod, sapiente deserunt dolore assumenda vel! Perspiciatis.
+			</div>
+			<table class="table" :style="tableStyles">
+				<tr>
+					<td>Title</td>
+					<td>Some</td>
+					<td>nz</td>
+				</tr>
+				<tr>
+					<td>Title</td>
+					<td>Some</td>
+					<td>nz</td>
+				</tr>
+				<tr>
+					<td>Title</td>
+					<td>Some</td>
+					<td>nz</td>
+				</tr>
+			</table> 
+		</div>
+	</div>
+	<script>
+
+		Vue.createApp({
+			data: () => ({
+				alertHeight: 100,
+				tableStyles: {
+					color: '#f90',
+					backgroundColor: '#000',
+					fontSize: '20px'
+				}
+			}),
+			computed: {
+				alertStyles(){
+					return {
+						'min-height': this.alertHeight + 'px'
+					}
+				}
+			}
+		}).mount('.sample');
+	</script>
+</body>
+</html>

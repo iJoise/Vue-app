@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="ru">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Урок 1</title>
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<link href="css/styles.css" rel="stylesheet">
+	<script src="js/vue.js"></script>
+</head>
+<body>
+	<div class="wrapper">
+		<div class="sample">
+			<input type="text" v-model.trim.lazy="promo"><br>
+			<hr>
+			{{ price }}
+			<div v-if="hasSale">
+				<div class="alert alert-danger">- {{ sale }}%</div>
+				{{ total }}
+			</div>			
+		</di> 
+	</div>
+	<script>
+		
+		let app = Vue.createApp({
+			data(){
+				return {
+					promo: '',
+					price: 1000
+				}
+			},
+			computed: {
+				sale(){
+					return this.getSale(this.promo);
+				},
+				hasSale(){
+					return this.sale > 0;
+				},
+				total(){
+					return this.price * (1 - this.sale / 100);
+				}
+			},
+			methods: {
+				getSale(promo){
+					let codes = {
+						some: 10,
+						other: 20
+					};
+
+					return codes.hasOwnProperty(promo) ? codes[promo] : 0;
+				}
+			}
+		});
+		
+		let root = app.mount('.sample');
+		console.log(root)
+
+	</script>
+</body>
+</html>

@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>1</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link href="css/styles.css" rel="stylesheet" />
+    <style>
+      .content {
+        height: 300px;
+        overflow: auto;
+      }
+    </style>
+    <script src="js/vue.js"></script>
+  </head>
+
+  <body>
+    <div class="wrapper">
+      <div class="sample">
+        <form v-if="!showResult" @submit.prevent="handleSubmit">
+          <div class="content alert alert-info" @scroll="updateProgress">
+            <p>
+              This text no one reads. This text no one reads. This text no one
+              reads.
+            </p>
+            <p>
+              This text no one reads. This text no one reads. This text no one
+              reads.
+            </p>
+            <p>
+              This text no one reads. This text no one reads. This text no one
+              reads.
+            </p>
+            <p>
+              This text no one reads. This text no one reads. This text no one
+              reads.
+            </p>
+            <p>
+              This text no one reads. This text no one reads. This text no one
+              reads.
+            </p>
+            <p>
+              This text no one reads. This text no one reads. This text no one
+              reads.
+            </p>
+            <p>
+              This text no one reads. This text no one reads. This text no one
+              reads.
+            </p>
+            <p>
+              This text no one reads. This text no one reads. This text no one
+              reads.
+            </p>
+            <p>
+              This text no one reads. This text no one reads. This text no one
+              reads.
+            </p>
+            <p>
+              This text no one reads. This text no one reads. This text no one
+              reads.
+            </p>
+            <p>
+              This text no one reads. This text no one reads. This text no one
+              reads.
+            </p>
+            <p>
+              This text no one reads. This text no one reads. This text no one
+              reads.
+            </p>
+            <p>
+              This text no one reads. This text no one reads. This text no one
+              reads.
+            </p>
+            <p>
+              This text no one reads. This text no one reads. This text no one
+              reads.
+            </p>
+            <p>
+              This text no one reads. This text no one reads. This text no one
+              reads.
+            </p>
+            <p>
+              This text no one reads. This text no one reads. This text no one
+              reads.
+            </p>
+            <p>
+              This text no one reads. This text no one reads. This text no one
+              reads.
+            </p>
+            <p>
+              This text no one reads. This text no one reads. This text no one
+              reads.
+            </p>
+            <p>
+              This text no one reads. This text no one reads. This text no one
+              reads.
+            </p>
+            <p>
+              This text no one reads. This text no one reads. This text no one
+              reads.
+            </p>
+          </div>
+          <div>
+            <div class="progress">
+              <div
+                class="progress-bar"
+                role="progressbar"
+                aria-valuenow="progress"
+                aria-valuemin="0"
+                aria-valuemax="100"
+                :style="progressStyle"
+              ></div>
+            </div>
+          </div>
+          <template v-if="scrollDown">
+            <hr />
+            <div class="form-check">
+              <label class="form-check-label">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  v-model="allAgree"
+                  :name="allAgree"
+                />
+                Agree all
+              </label>
+            </div>
+            <div class="form-check">
+              <label class="form-check-label">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  v-model="getSpam"
+                  :name="getSpam"
+                />
+                Get spam
+              </label>
+            </div>
+          </template>
+          <template v-if="getSpam">
+            <div class="form-check">
+              <label class="form-check-label">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  value="email"
+                  v-model="radio"
+                  name="email"
+                />
+                email
+              </label>
+            </div>
+            <div class="form-check">
+              <label class="form-check-label">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  value="phone"
+                  v-model="radio"
+                  name="phone"
+                />
+                phone
+              </label>
+            </div>
+          </template>
+          <hr />
+          <button :disabled="!allAgree" class="btn btn-primary">
+            Send Data
+          </button>
+        </form>
+        <div v-else>
+          <table class="table table-bordered">
+            <tr>
+              <td>Agree all</td>
+              <td :style="agreeAllColor">{{transformAllAgree}}</td>
+            </tr>
+            <tr>
+              <td>Get spam</td>
+              <td :style="getSpamColor">{{transformGetSpam}}</td>
+            </tr>
+            <tr v-if="getSpam">
+              <td>Spam type</td>
+              <td>{{radio}}</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+    <script>
+      Vue.createApp({
+        data: () => ({
+          allAgree: false,
+          getSpam: false,
+          radio: "email",
+          showResult: false,
+          progress: 0,
+        }),
+        computed: {
+          transformAllAgree() {
+            return this.allAgree ? "Yes" : "No";
+          },
+          transformGetSpam() {
+            return this.getSpam ? "Yes" : "No";
+          },
+          agreeAllColor() {
+            return {
+              color: this.allAgree ? "green" : "red",
+            };
+          },
+          getSpamColor() {
+            return {
+              color: this.getSpam ? "green" : "red",
+            };
+          },
+          scrollDown() {
+            return this.progress > 99;
+          },
+          progressStyle() {
+            return { width: this.progress + "%" };
+          },
+        },
+        methods: {
+          handleSubmit() {
+            this.showResult = true;
+          },
+          updateProgress(e) {
+            const content = e.target;
+            if (content) {
+              const top = content.scrollTop;
+              const height = content.scrollHeight - content.clientHeight;
+              this.progress = Math.max(
+                this.progress,
+                Math.floor((top / height) * 100)
+              );
+            }
+          },
+        },
+      }).mount(".sample");
+    </script>
+  </body>
+</html>

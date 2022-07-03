@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="ru">
+<head>
+	 <meta charset="UTF-8">
+	 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	 <title>1</title>
+	 <link rel="stylesheet" href="css/bootstrap.min.css">
+	 <link rel="stylesheet" href="css/font-awesome.min.css">
+	 <link href="css/styles.css" rel="stylesheet">
+	<style>
+		.content{
+			height: 300px;
+			overflow: auto;
+		}
+	</style>
+	 <script src="js/vue.js"></script>
+</head>
+<body>
+	<div class="wrapper">
+		<div class="sample">
+			<form v-if="!formDone" @submit.prevent="sendForm">
+				<div class="content alert alert-info" @scroll="onScroll">
+					<p>This text no one reads. This text no one reads. This text no one reads.</p>
+					<p>This text no one reads. This text no one reads. This text no one reads.</p>
+					<p>This text no one reads. This text no one reads. This text no one reads.</p>
+					<p>This text no one reads. This text no one reads. This text no one reads.</p>
+					<p>This text no one reads. This text no one reads. This text no one reads.</p>
+					<p>This text no one reads. This text no one reads. This text no one reads.</p>
+					<p>This text no one reads. This text no one reads. This text no one reads.</p>
+					<p>This text no one reads. This text no one reads. This text no one reads.</p>
+					<p>This text no one reads. This text no one reads. This text no one reads.</p>
+					<p>This text no one reads. This text no one reads. This text no one reads.</p>
+					<p>This text no one reads. This text no one reads. This text no one reads.</p>
+					<p>This text no one reads. This text no one reads. This text no one reads.</p>
+					<p>This text no one reads. This text no one reads. This text no one reads.</p>
+					<p>This text no one reads. This text no one reads. This text no one reads.</p>
+					<p>This text no one reads. This text no one reads. This text no one reads.</p>
+					<p>This text no one reads. This text no one reads. This text no one reads.</p>
+					<p>This text no one reads. This text no one reads. This text no one reads.</p>
+					<p>This text no one reads. This text no one reads. This text no one reads.</p>
+					<p>This text no one reads. This text no one reads. This text no one reads.</p>
+					<p>This text no one reads. This text no one reads. This text no one reads.</p>
+				</div>
+				<div class="progress mb-3">
+					<div class="progress-bar" :style="progressStyles"></div>
+				</div>
+				<template v-if="scrollDone">
+					<div class="form-check">
+						<label class="form-check-label">
+							<input class="form-check-input" type="checkbox" v-model="flags.agree"> 
+							Agree All
+						</label>
+					</div>
+					<div class="form-check">
+						<label class="form-check-label">
+							<input class="form-check-input" type="checkbox" v-model="flags.getSpam"> 
+							Get Spam
+						</label>
+					</div>
+					<template v-if="flags.getSpam">
+						<div class="form-check">
+							<label class="form-check-label">
+								<input class="form-check-input" type="radio" v-model="spamType" value="email"> 
+								Email
+							</label>
+						</div>
+						<div class="form-check">
+							<label class="form-check-label">
+								<input class="form-check-input" type="radio" v-model="spamType" value="phone"> 
+								Phone
+							</label>
+						</div>
+					</template>
+					<hr>
+					<button class="btn btn-primary" :disabled="!formReady">
+						Send Data
+					</button>
+				</template>
+			</form>
+			<div v-else>
+				<table class="table table-bordered">
+					<tr>
+						<td>Agree All</td>
+						<td :class="flags.agree ? 'text-success' : 'text-danger'">{{ flags.agree ? 'Yes' : 'No' }}</td>
+					</tr>
+					<tr>
+						<td>Get Spam</td>
+						<td :class="flags.getSpam ? 'text-success' : 'text-danger'">{{ flags.getSpam ? 'Yes' : 'No' }}</td>
+					</tr>
+					<tr v-if="flags.getSpam">
+						<td>Spam type</td>
+						<td>{{ spamType }}</td>
+					</tr>
+				</table>
+			</div> 
+		</div>
+	</div>
+	<script>
+		
+		Vue.createApp({
+			data: () => ({
+				formDone: false,
+				scrollValue: 0,
+				flags: {
+					agree: false,
+					getSpam: false
+				},
+				spamType: 'email'
+			}),
+			computed: {
+				progressStyles(){
+					return { width: this.scrollValue * 100 + '%' };
+				},
+				scrollDone(){
+					return this.scrollValue > 0.99;
+				},
+				formReady(){
+					return this.scrollDone && this.flags.agree;
+				}
+			},
+			methods: {
+				onScroll(e){
+					let el = e.target;
+					this.scrollValue = Math.max(
+						this.scrollValue,
+						el.scrollTop / (el.scrollHeight - el.clientHeight)
+					);
+				},
+				sendForm(){
+					if(this.formReady){
+						this.formDone = true; // real fetch http://......
+					}
+				}
+			}
+		}).mount('.sample');
+
+		/*
+			spamTypes: [
+				{ value: 'email', label: 'Email' }
+
+			]
+
+		*/
+	</script>
+</body>
+</html>

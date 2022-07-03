@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ru">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Урок 1</title>
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<link href="css/styles.css" rel="stylesheet">
+	<script src="js/vue.js"></script>
+</head>
+<body>
+	<div class="wrapper">
+		<div class="sample">
+			<input type="text" v-bind:value="name" v-on:input="name = $event.target.value">
+			<hr>
+			<h2>Hello, {{ name }}</h2>
+		</div>
+	</div>
+	<script>
+		
+		let app = Vue.createApp({
+			data(){
+				return {
+					name: ''
+				}
+			}
+		});
+		
+		let root = app.mount('.sample');
+		console.log(root)
+
+		/*
+			v-bind			:value="some"
+			v-on				v-on:click.prevent.once		@click=""
+			v-if
+			v-else-if
+			v-else
+			v-show
+			v-model				v-on:click.lazy.number
+			v-for
+			e t.c.
+		*/
+
+
+		/* input.addEventListener('input', function(e){
+		let $event = e;
+		this.name = $event.target.value */
+
+	</script>
+</body>
+</html>

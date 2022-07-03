@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>1</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/font-awesome.min.css" />
+    <link href="css/styles.css" rel="stylesheet" />
+    <script src="js/vue.js"></script>
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="sample">
+        <form v-if="!formIsSent" @submit.prevet="formSubmit">
+          <div class="progress">
+            <div :style="getPercent" class="progress-bar"></div>
+          </div>
+          <div>
+            <div class="form-group" v-for="field,i in info">
+              <inputs-fields
+                :label="field.label"
+                :activated="field.activated"
+                :valid="field.valid"
+                :value="field.value"
+                @updated="onInput(i, $event)"
+              ></inputs-fields>
+            </div>
+          </div>
+          <button :disabled="!formReady" class="btn btn-primary">
+            Send Data
+          </button>
+          <pre>{{fieldDone}}</pre>
+        </form>
+        <div v-else>
+          <table class="table table-bordered">
+            <tr v-for="item in info">
+              <td>{{ item.label }}</td>
+              <td>{{ item.value }}</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+    <script>
+      const InputsFields = {
+        props: {
+          label: { type: String, required: true },
+          activated: { type: Boolean, required: true },
+          valid: { type: Boolean, required: true },
+          value: { type: String, required: true },
+        },
+        computed: {
+          validClass() {
+            return this.valid
+              ? "fa fa-check-circle text-success"
+              : "fa fa-exclamation-circle text-danger";
+          },
+        },
+        template: `<div>
+          <label>
+            {{ label }}
+            <span
+              v-if="activated"
+              :class="validClass"
+            ></span>
+          </label>
+          <input
+            type="text"
+            class="form-control"
+            :value="value"
+            @input="$emit('updated', $event.target.value)"
+          />
+        </div>
+        `,
+      };
+      Vue.createApp({
+        components: {
+          InputsFields,
+        },
+        data: () => ({
+          info: [
+            {
+              label: "Name",
+              value: "",
+              pattern: /^[a-zA-Z ]{2,30}$/,
+            },
+            {
+              label: "Phone",
+              value: "",
+              pattern: /^[0-9]{7,14}$/,
+            },
+            {
+              label: "Email",
+              value: "",
+              pattern: /.+/,
+            },
+            {
+              label: "Some Field 1",
+              value: "",
+              pattern: /.+/,
+            },
+            {
+              label: "Some Field 2",
+              value: "",
+              pattern: /.+/,
+            },
+          ],
+          formIsSent: false,
+        }),
+        computed: {
+          fieldDone() {
+            return this.info.filter((el) => el.valid).length;
+          },
+          getPercent() {
+            const percent = (100 / this.info.length) * this.fieldDone;
+            return {
+              width: percent + "%",
+            };
+          },
+          formReady() {
+            return this.fieldDone === this.info.length;
+          },
+        },
+        methods: {
+          onInput(i, val) {
+            let field = this.info[i];
+            field.value = val.trim();
+            field.activated = true;
+            field.valid = field.pattern.test(field.value);
+          },
+          formSubmit() {
+            if (this.formReady) {
+              this.formIsSent = true;
+            }
+          },
+        },
+        created() {
+          this.info.forEach((field) => {
+            field.valid = false;
+            field.activated = false;
+          });
+        },
+      }).mount(".sample");
+    </script>
+  </body>
+</html>

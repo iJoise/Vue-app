@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="ru">
+<head>
+	 <meta charset="UTF-8">
+	 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	 <title>1</title>
+	 <link rel="stylesheet" href="css/bootstrap.min.css">
+	 <link rel="stylesheet" href="css/font-awesome.min.css">
+	 <link href="css/styles.css" rel="stylesheet">
+	 <script src="js/vue.js"></script>
+</head>
+<body>
+	 <div class="wrapper">
+		  <div class="sample">
+			<form>
+				<div class="progress">
+					<div class="progress-bar"></div>
+				</div>
+				<div>
+					<app-field 
+						v-for="field,i in info"
+						:key="i"
+						:label="field.label"
+						:value="field.value"
+						:valid="field.valid"
+						@input="onUpdate(i, $event)"
+					></app-field>
+				</div>
+				<button class="btn btn-primary">
+					Send Data
+				</button>
+			</form>
+			<pre>
+				{{ fieldDone }}
+				{{ formReady }}
+				{{ progressStyles }}
+			</pre>
+			<div>
+				<table class="table table-bordered">
+					<tr>
+						<td></td>
+						<td></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	 </div>
+	<script>
+		const AppField = {
+			props: {
+				label: { type: String, required: true },
+				value: { type: String, required: true },
+				valid: { type: Boolean, required: true }
+			},
+			data(){
+				return {
+					activated: this.value != ''
+				}
+			},
+			methods: {
+				onInput(e){
+					this.activated = true;
+					this.$emit('input', e.target.value)
+				}
+			},
+			template: `<div class="form-group">
+				<label>
+					{{ label }}
+					<span v-if="activated"
+						:class="valid ? 'fa fa-check-circle text-success' : 'fa fa-exclamation-circle text-danger'"
+					></span>
+				</label>
+				<input type="text" class="form-control" :value="value" @input="onInput">
+			</div>`
+		};
+
+		const AppRoot = ({
+			components: {
+				AppField
+			},
+			data: () => ({
+				info: [
+					{
+						label: 'Name',
+						value: '',
+						pattern: /^[a-zA-Z ]{2,30}$/
+					},
+					{
+						label: 'Phone',
+						value: '',
+						pattern: /^[0-9]{7,14}$/
+					},
+					{
+						label: 'Email',
+						value: '',
+						pattern: /.+/
+					},
+					{
+						label: 'Some Field 1',
+						value: '',
+						pattern: /.+/
+					},
+					{
+						label: 'Some Field 2',
+						value: '',
+						pattern: /.+/
+					}
+				]
+			}),
+			computed: {
+				fieldDone(){
+					// return this.info.reduce((total, field) => total + (field.valid ? 1 : 0), 0)
+					return this.info.filter(field => field.valid).length;
+				},
+				formReady(){
+					return this.fieldDone >= this.info.length;
+				},
+				progressStyles(){
+					let rel = this.fieldDone / this.info.length * 100;
+					return { width: rel + '%' };
+				}
+			},
+			methods: {
+				onUpdate(i, val){
+					console.log(val);
+					let field = this.info[i];
+					field.value = val.trim();
+					field.valid = field.pattern.test(field.value);
+				} 
+			},
+			created(){
+				this.info.forEach(field => {
+					field.valid = false;
+				})
+			}
+		});
+
+		Vue.createApp(AppRoot).mount('.sample');
+	</script>
+</body>
+</html>

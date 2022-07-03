@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="ru">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Урок 1</title>
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<link href="css/styles.css" rel="stylesheet">
+	<script src="js/vue.js"></script>
+</head>
+<body>
+	<div class="wrapper">
+		<div class="sample">
+			FN: <input type="text" v-model.trim="firstName"><br>
+			LN: <input type="text" v-model.trim="lastName"><br>
+			<hr>
+			<h2>Hello, {{ fullName() }}</h2>
+			<hr>
+			<button @click="showAlert = !showAlert" class="btn btn-success" type="button">Toggle alert</button>
+			<div class="alert alert-danger mt-3" v-show="showAlert">
+				Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt porro iste incidunt optio maxime eos vero cupiditate delectus in velit quae neque aliquid facilis nobis repellendus, quidem eveniet! Nihil, cum.
+			</div>
+		</div>
+	</div>
+	<script>
+		
+		let app = Vue.createApp({
+			data(){
+				return {
+					showAlert: false,
+					firstName: '',
+					lastName: ''
+				}
+			},
+			methods: {
+				fullName(){
+					console.log('here');
+					return (this.firstName + ' ' + this.lastName).trim();
+				}
+			}
+		});
+		
+		let root = app.mount('.sample');
+		console.log(root)
+
+		/*
+			v-bind			:value="some"
+			v-on				v-on:click.prevent.once		@click=""
+			v-if
+			v-else-if
+			v-else
+			v-show
+			v-model				v-on:click.lazy.number
+			e t.c.
+		*/
+
+
+		/* input.addEventListener('input', function(e){
+		let $event = e;
+		this.name = $event.target.value */
+
+	</script>
+</body>
+</html>
