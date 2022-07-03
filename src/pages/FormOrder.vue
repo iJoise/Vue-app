@@ -23,6 +23,7 @@
     </form>
     <div v-else>
       <h1>All Done!</h1>
+      <button @click="confirmOrder" class="btn btn-primary">To products</button>
     </div>
     <app-modal
       v-model="showModal"
@@ -37,10 +38,10 @@
 </template>
 
 <script>
-import FormFields from "./FormComponents/FormFields.vue";
-import ProgressBar from "./FormComponents/ProgressBar.vue";
-import AppModal from "./FormComponents/AppModal.vue";
-import FormTable from "./FormComponents/FormTable.vue";
+import FormFields from "../components/FormFields.vue";
+import ProgressBar from "../components/ProgressBar.vue";
+import AppModal from "../components/AppModal.vue";
+import FormTable from "../components/FormTable.vue";
 
 export default {
   name: "AppForm",
@@ -54,21 +55,16 @@ export default {
       },
       {
         label: "Phone",
-        value: "923233223",
-        pattern: /^[0-9]{7,14}$/,
+        value: "",
+        pattern: /^\d{7,14}$/,
       },
       {
         label: "Email",
-        value: "asd",
+        value: "",
         pattern: /.+/,
       },
       {
-        label: "Some Field 1",
-        value: "fds",
-        pattern: /.+/,
-      },
-      {
-        label: "Some Field 2",
+        label: "Address",
         value: "",
         pattern: /.+/,
       },
@@ -102,6 +98,10 @@ export default {
     },
     cancel(close) {
       close();
+    },
+    confirmOrder() {
+      this.$store.dispatch("cart/clearCart");
+      this.$router.push({ name: "catalog" });
     },
   },
   created() {

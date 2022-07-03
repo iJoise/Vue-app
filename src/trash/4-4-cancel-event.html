@@ -17,8 +17,8 @@
 					<div class="progress-bar"></div>
 				</div>
 				<div>
-					<app-field 
-						v-for="field,i in info"
+					<app-field
+						v-for="(field,i) in info"
 						:key="i"
 						:label="field.label"
 						:value="field.value"
@@ -129,7 +129,7 @@
 					let field = this.info[i];
 					field.value = val.trim();
 					field.valid = field.pattern.test(field.value);
-				} 
+				}
 			},
 			created(){
 				this.info.forEach(field => {

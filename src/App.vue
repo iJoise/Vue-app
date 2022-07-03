@@ -23,7 +23,7 @@
             <ul class="list-group">
               <li
                 class="list-group-item"
-                v-for="item in menu"
+                v-for="item in renderLink"
                 :key="item.route"
               >
                 <router-link
@@ -49,13 +49,19 @@ import { mapGetters } from "vuex";
 export default {
   data: () => ({
     menu: [
-      { route: "catalog", text: "Products" },
-      { route: "cart", text: "Cart" },
-      { route: "checkout", text: "Order" },
+      { route: "catalog", text: "Products", active: true },
+      { route: "cart", text: "Cart", active: true },
+      { route: "checkout", text: "Order", active: false },
     ],
   }),
   computed: {
     ...mapGetters("cart", ["total", "length"]),
+    renderLink() {
+      return this.menu.filter((item) => item.active);
+    },
+  },
+  updated() {
+    this.menu[2].active = this.length > 0;
   },
   // $route, $router
 };

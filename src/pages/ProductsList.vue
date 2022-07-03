@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1>Products</h1>
-    <div class="row">
+    <div class="row" v-if="!loading">
       <div
         class="col col-sm-4 mb-3 mt-3"
         v-for="pr in productList"
@@ -43,12 +43,25 @@ import { mapGetters, mapActions } from "vuex";
 
 export default {
   name: "AllProducts",
+  data() {
+    return {
+      loading: false,
+    };
+  },
   computed: {
     ...mapGetters("products", { productList: "all" }),
     ...mapGetters("cart", ["inCart", "itemsDetailed"]),
   },
   methods: {
     ...mapActions("cart", ["add", "remove"]),
+  },
+  created() {
+    this.loading = true;
+
+    this.$store.dispatch("products/load");
+    this.$store.dispatch("cart/load");
+
+    this.loading = false;
   },
 };
 

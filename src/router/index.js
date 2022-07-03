@@ -1,9 +1,9 @@
 import { createRouter, createWebHistory } from "vue-router";
 
-import AppProductsList from "@/components/ProductsList";
+import AppProductsList from "@/pages/ProductsList";
 import AppProduct from "@/components/Product";
-import AppCart from "@/components/Cart";
-import AppCheckout from "@/components/Checkout";
+import AppCart from "@/pages/Cart";
+import FormOrder from "@/pages/FormOrder";
 import AppE404 from "@/components/E404";
 
 const routes = [
@@ -20,7 +20,7 @@ const routes = [
   {
     name: "checkout",
     path: "/order",
-    component: AppCheckout,
+    component: FormOrder,
   },
   {
     name: "product",

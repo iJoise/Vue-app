@@ -13,12 +13,10 @@ import {
 
 library.add(faCircleCheck, faCircleExclamation, faXmark);
 
-store.dispatch("products/load").then(() => {
-  createApp(App)
-    .use(store)
-    .use(router)
-    .component("fa-icon", FontAwesomeIcon)
-    .mount("#app");
-});
+createApp(App)
+  .use(store)
+  .use(router)
+  .component("fa-icon", FontAwesomeIcon)
+  .mount("#app");
 
 import "bootstrap/dist/css/bootstrap.min.css";

@@ -30,7 +30,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-import CartTable from "./CartTable";
+import CartTable from "../components/CartTable";
 
 export default {
   name: "StoreCart",

@@ -1,0 +1,66 @@
+Root = http://faceprog.ru/reactcourseapi/
+
+// ----------------------------------------------------------------------------
+
+GET products/all.php - получить все товары
+
+	params - none
+
+	return Array of Objects
+		each object has keys
+			(int) id - id товара
+			(str) title - название товара
+			(int) price - цена
+			(int) rest - остаток на складе
+			
+// ----------------------------------------------------------------------------			
+			
+GET cart/load.php - загрузить корзину
+
+	params
+		(str) token - токен корзины, если не передан генерируется новая корзина
+
+	return Objects
+		(arr) cart - array of objects {(int) id, (int) cnt}
+		(str) token - текущий токен корзины
+		(bool) needUpdate - выдали ли нам новый токен
+	
+// ----------------------------------------------------------------------------		
+	
+GET cart/add.php - добавить товар в корзину
+
+	params
+		(str) token - токен корзины, required
+		(int) id - id товара, required
+		
+	reutrn bool - удалось ли добавить
+	
+// ----------------------------------------------------------------------------	
+	
+GET cart/remove.php - удалить товар из корзины
+
+	params
+		(str) token - токен корзины, required
+		(int) id - id товара, required
+		
+	reutrn bool - удалось ли удалить
+	
+// ----------------------------------------------------------------------------	
+
+GET cart/change.php - поменять количество товара в корзине
+
+	params
+		(str) token - токен корзины, required
+		(int) id - id товара, required
+		(int) cnt - новое количество, required
+		
+	reutrn bool - удалось ли поменять количество
+	
+// ----------------------------------------------------------------------------	
+
+GET cart/clean.php - поменять количество этого товара в корзине
+
+	params
+		(str) token - токен корзины, required
+		
+	reutrn bool - удалось ли очистить корзину

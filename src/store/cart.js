@@ -90,6 +90,10 @@ export default {
         }
       }
     },
+    async clearCart({ state }) {
+      let response = await fetch(`${BASEURL}clean.php?token=${state.token}`);
+      await response.json();
+    },
   },
 };
 
