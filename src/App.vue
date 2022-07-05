@@ -1,80 +1,116 @@
 <template>
-  <div>
-    <header>
+  <div id="app" class="grid-box">
+    <header class="mt-3">
       <div class="container">
-        <div class="row">
-          <div class="col col-sm-9">
-            <h1>Site</h1>
+        <app-alert />
+        <div class="row justify-content-between">
+          <div class="col flex-norm">
+            <div class="h3">Sample site</div>
+            <div class="">About some and other products</div>
           </div>
-          <div class="col col-sm-3">
-            <div class="alert alert-default">
-              <div>In Cart: {{ length }}</div>
-              <div>Total: {{ total }}</div>
-            </div>
+          <div class="col flex-norm">
+            <div>In Cart: {{ cartCount }}</div>
+            <div>Total: {{ cartTotal }}</div>
           </div>
         </div>
+        <hr />
+        <nav class="navbar navbar-expand p-0">
+          <ul class="navbar-nav">
+            <li v-for="item in menuItems" :key="item.route" class="nav-item">
+              <router-link
+                :to="{ name: item.route }"
+                class="nav-link"
+                active-class="active"
+                :exact="item.exact"
+                >{{ item.title }}</router-link
+              >
+            </li>
+          </ul>
+        </nav>
         <hr />
       </div>
     </header>
     <section>
       <div class="container">
-        <div class="row">
-          <div class="col col-sm-3 menu">
-            <ul class="list-group">
-              <li
-                class="list-group-item"
-                v-for="item in menu"
-                :key="item.route"
-              >
-                <router-link
-                  :to="{ name: item.route }"
-                  exact-active-class="text-danger"
-                >
-                  {{ item.text }}
-                </router-link>
-              </li>
-            </ul>
-          </div>
-          <div class="col col-sm-9">
-            <router-view />
-          </div>
-        </div>
+        <router-view v-slot="{ Component }">
+          <transition name="slide" mode="out-in">
+            <component :is="Component" />
+          </transition>
+        </router-view>
       </div>
     </section>
+    <footer class="mb-3">
+      <div class="container">
+        <hr />
+        <div>&copy; Rights not found</div>
+      </div>
+    </footer>
   </div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
+import AppAlert from "@/components/Alert";
+
 export default {
-  data: () => ({
-    menu: [
-      { route: "catalog", text: "Products" },
-      { route: "cart", text: "Cart" },
-      { route: "checkout", text: "Order" },
-    ],
-  }),
-  computed: {
-    ...mapGetters("cart", ["total", "length"]),
+  components: {
+    AppAlert,
   },
-  // $route, $router
+  data() {
+    return {
+      menuItems: [
+        { route: "products", title: "Products", exact: true },
+        { route: "cart", title: "Cart", exact: true },
+        { route: "checkout", title: "Checkout", exact: true },
+        /* { route: 'office', title: 'Office', exact: false } */
+      ],
+    };
+  },
+  computed: {
+    ...mapGetters("cart", { cartCount: "totalCnt", cartTotal: "totalSum" }),
+  },
 };
 </script>
 
 <style>
-.menu {
-  border-right: 1px solid #ddd;
+.grid-box {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  min-height: 100vh;
 }
 
-.list-group-item {
-  transition: background 0.3s, color 0.3s;
+.flex-norm {
+  flex: 0 1 auto !important;
+  width: auto !important;
 }
 
-.list-group-item a {
-  text-decoration: none;
+a.active {
+  color: red !important;
 }
 
-.list-group-item.active a {
-  color: inherit;
+.slide-enter-active {
+  animation: slideIn 0.3s;
+}
+
+.slide-leave-active {
+  animation: slideOut 0.3s;
+}
+
+@keyframes slideIn {
+  from {
+    transform: rotateY(90deg);
+  }
+  to {
+    transform: rotateY(0deg);
+  }
+}
+
+@keyframes slideOut {
+  from {
+    transform: rotateY(0deg);
+  }
+  to {
+    transform: rotateY(90deg);
+  }
 }
 </style>

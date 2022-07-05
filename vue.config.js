@@ -1,8 +1,17 @@
-const { defineConfig } = require("@vue/cli-service");
+const proxy = {
+  "/randomapi": {
+    target: "http://faceprog.ru",
+    secure: false,
+    changeOrigin: true,
+  },
+};
 
-module.exports = defineConfig({
-  transpileDependencies: true,
-  publicPath: "/",
-  productionSourceMap: false,
+module.exports = {
   filenameHashing: false,
-});
+  productionSourceMap: false,
+  configureWebpack: () => {
+    return {
+      devServer: { proxy },
+    };
+  },
+};

@@ -1,22 +1,35 @@
 import { createStore } from "vuex";
 
-import products from "./products";
 import cart from "./cart";
+import products from "./products";
+import user from "./user";
+import alerts from "./alerts";
 
-export default createStore({
+import { addErrorHandler } from "@/api/http";
+
+const store = createStore({
   modules: {
-    products,
     cart,
+    products,
+    user,
+    alerts,
   },
   strict: process.env.NODE_ENV !== "production",
 });
 
-/* $store.state.products.all
-$store.state.cart.all
+addErrorHandler(function (error) {
+  let config = error.response.config;
 
-$store.getters.all
+  if ("errorAlert" in config) {
+    store.dispatch("alerts/add", {
+      text: "Ошибка ответа от сервера " + config.errorAlert,
+      timeout: 3000,
+    });
 
-$store.getters['products/all']
-$store.getters['cart/all']
+    return false;
+  }
 
-*/
+  return Promise.reject(error);
+});
+
+export default store;

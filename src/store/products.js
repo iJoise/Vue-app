@@ -1,24 +1,29 @@
+import * as productsApi from "@/api/products.js";
+
 export default {
   namespaced: true,
   state: {
-    items: [],
+    items: null,
   },
   getters: {
     all: (state) => state.items,
-    productById: (state) => (id) => state.items.find((item) => item.id === id),
+    one: (state) => (id) => state.items.find((pr) => pr.id === id),
+    /* one(state){
+			return function(id){
+				return state.items.find(pr => pr.id == id);
+			}
+		}*/
   },
   mutations: {
-    setItems(state, products) {
-      state.items = products;
+    setItems(state, items) {
+      state.items = items;
     },
   },
   actions: {
     async load({ commit }) {
-      let response = await fetch(
-        "http://faceprog.ru/reactcourseapi/products/all.php"
-      );
-      let products = await response.json();
+      let products = await productsApi.all();
       commit("setItems", products);
+      return products;
     },
   },
 };
