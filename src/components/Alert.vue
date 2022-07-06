@@ -1,9 +1,13 @@
 <template>
   <div class="box">
     <transition-group name="item" tag="div">
-      <p class="item" v-for="alert in alerts" :key="alert.id">
+      <div class="item" v-for="alert in alerts" :key="alert.id">
         {{ alert.text }}
-      </p>
+        <p v-if="alert.critical">
+          Ошибка не позволит сайту работать,
+          <a href="#" @click="location.reload()">перезагрузите страницу</a>
+        </p>
+      </div>
     </transition-group>
   </div>
 </template>
@@ -15,6 +19,9 @@ export default {
   name: "AppAlert",
   computed: {
     ...mapGetters("alerts", { alerts: "all" }),
+    location() {
+      return window.location;
+    },
   },
 };
 </script>

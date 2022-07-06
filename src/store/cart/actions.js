@@ -3,20 +3,24 @@ import * as cartApi from "@/api/cart.js";
 export default {
   async load({ commit }) {
     let savedToken = localStorage.getItem("cartToken");
-    let { token, needUpdate, cart } = await cartApi.load(savedToken);
+    let { res, data } = await cartApi.load(savedToken);
 
-    if (needUpdate) {
-      localStorage.setItem("cartToken", token);
+    if (res) {
+      let { token, needUpdate, cart } = data;
+
+      if (needUpdate) {
+        localStorage.setItem("cartToken", token);
+      }
+
+      commit("set", { cart, token });
     }
-
-    commit("set", { cart, token });
   },
   async add({ state, getters, commit }, { id }) {
     if (getters.canAdd(id)) {
       commit("startProccess", id);
-      let res = await cartApi.add(state.token, id);
+      let { res, data } = await cartApi.add(state.token, id);
 
-      if (res === true) {
+      if (res && data) {
         commit("add", { id });
       }
 
@@ -26,9 +30,9 @@ export default {
   async remove({ state, getters, commit }, { id }) {
     if (getters.canUpdate(id)) {
       commit("startProccess", id);
-      let res = await cartApi.remove(state.token, id);
+      let { res, data } = await cartApi.remove(state.token, id);
 
-      if (res === true) {
+      if (res && data) {
         commit("remove", { ind: getters.index(id) });
       }
 
@@ -39,9 +43,9 @@ export default {
     if (getters.canUpdate(id)) {
       commit("startProccess", id);
       let validCnt = Math.max(1, cnt);
-      let res = await cartApi.change(state.token, id, validCnt);
+      let { res, data } = await cartApi.change(state.token, id, validCnt);
 
-      if (res === true) {
+      if (res && data) {
         commit("setCnt", { ind: getters.index(id), cnt: validCnt });
       }
 

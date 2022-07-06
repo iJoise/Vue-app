@@ -1,5 +1,5 @@
 const proxy = {
-  "/randomapi": {
+  "/randomapi2": {
     target: "http://faceprog.ru",
     secure: false,
     changeOrigin: true,

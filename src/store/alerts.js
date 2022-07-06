@@ -8,21 +8,22 @@ export default {
     all: (state) => state.messages,
   },
   mutations: {
-    add(state, { text }) {
-      state.messages.push({ text, id: ++state.lastAI }); // hw: type, mb time
+    add(state, { text, critical }) {
+      state.messages.push({ text, id: ++state.lastAI, critical }); // hw: type, mb time
     },
-    remove(state, id) {
+    remove(state, { id }) {
       state.messages = state.messages.filter((msg) => msg.id !== id);
     },
   },
   actions: {
-    add({ state, commit }, { text, timeout }) {
-      commit("add", { text });
+    add({ state, commit }, { text, timeout, critical }) {
+      commit("add", { text, critical });
       const { lastAI } = state;
-
-      setTimeout(() => {
-        commit("remove", lastAI);
-      }, timeout);
+      if (!critical) {
+        setTimeout(() => {
+          commit("remove", { id: lastAI });
+        }, timeout);
+      }
     },
   },
 };

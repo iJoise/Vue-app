@@ -5,7 +5,7 @@ import products from "./products";
 import user from "./user";
 import alerts from "./alerts";
 
-import { addErrorHandler } from "@/api/http";
+import { addResponseHandler } from "@/api/http";
 
 const store = createStore({
   modules: {
@@ -17,19 +17,35 @@ const store = createStore({
   strict: process.env.NODE_ENV !== "production",
 });
 
-addErrorHandler(function (error) {
-  let config = error.response.config;
+addResponseHandler(
+  function (response) {
+    if ("errorAlert" in response.config) {
+      response.data = { res: true, data: response.data };
+    }
 
-  if ("errorAlert" in config) {
-    store.dispatch("alerts/add", {
-      text: "Ошибка ответа от сервера " + config.errorAlert,
-      timeout: 3000,
-    });
+    return response;
+  },
+  function (error) {
+    let config = error.response.config;
 
-    return false;
+    if ("errorAlert" in config) {
+      let { errorAlert } = config;
+
+      if (typeof errorAlert === "string") {
+        errorAlert = { text: errorAlert };
+      }
+
+      store.dispatch("alerts/add", {
+        text: "Ошибка ответа от сервера " + errorAlert.text,
+        timeout: errorAlert.timeout ?? 3000,
+        critical: errorAlert.critical ?? false,
+      });
+
+      return { data: { res: false, data: null } };
+    }
+
+    return Promise.reject(error);
   }
-
-  return Promise.reject(error);
-});
+);
 
 export default store;
