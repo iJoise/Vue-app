@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const instance = axios.create({
-  baseURL: "/randomapi2/",
+  baseURL: "/vue-advanced-api/",
   timeout: 10000,
 });
 

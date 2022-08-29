@@ -57,17 +57,26 @@ export default {
     AppAlert,
   },
   data() {
-    return {
-      menuItems: [
-        { route: "products", title: "Products", exact: true },
-        { route: "cart", title: "Cart", exact: true },
-        { route: "checkout", title: "Checkout", exact: true },
-        /* { route: 'office', title: 'Office', exact: false } */
-      ],
-    };
+    return {};
   },
   computed: {
     ...mapGetters("cart", { cartCount: "totalCnt", cartTotal: "totalSum" }),
+    ...mapGetters("user", ["isLogin"]),
+    menuItems() {
+      let menu = [
+        { route: "products", title: "Products", exact: true },
+        { route: "cart", title: "Cart", exact: true },
+        { route: "checkout", title: "Checkout", exact: true },
+      ];
+
+      menu.push(
+        this.isLogin
+          ? { route: "office", title: "Office", exact: true }
+          : { route: "login", title: "Login", exact: false }
+      );
+
+      return menu;
+    },
   },
 };
 </script>
